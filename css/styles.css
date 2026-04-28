@@ -1,0 +1,204 @@
+:root {
+  --bg: #0f0f1a;
+  --panel: #1a1a2e;
+  --text: #eaeaea;
+  --muted: #8a8aa0;
+  --red: #e74c3c;
+  --blue: #3498db;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1a1a2e, #0a0a14);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+}
+
+h1 {
+  margin: 0 0 2px;
+  font-size: 22px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+canvas {
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 0 2px #2a2a4a inset;
+  background: #000;
+  max-width: 100%;
+  max-height: 82vh;
+  height: auto;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.control-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-label.red { color: var(--red); }
+.control-label.blue { color: var(--blue); }
+
+button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover { background: #3b7cc4; }
+button.secondary { background: #33334d; }
+button.secondary:hover { background: #44446a; }
+button.speed { background: #33334d; min-width: 42px; }
+button.speed.active { background: #4a90e2; }
+button.muted { background: #5a2a3a; }
+button.recording { background: #c0392b; }
+button.recording:hover { background: #e74c3c; }
+
+select {
+  background: #33334d;
+  color: var(--text);
+  border: 1px solid #44446a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status {
+  font-size: 20px;
+  font-weight: 700;
+  min-height: 26px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  max-width: 640px;
+  margin-top: 12px;
+  line-height: 1.55;
+}
+
+code {
+  background: #2a2a4a;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* ---- Grid editor panel --------------------------------------------- */
+.grid-editor {
+  width: 100%;
+  max-width: 720px;
+  margin: 14px 0 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2a2a4a;
+  border-radius: 8px;
+}
+
+.grid-editor > summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  user-select: none;
+  list-style: none;
+}
+.grid-editor > summary::-webkit-details-marker { display: none; }
+.grid-editor > summary::before {
+  content: "\25B6";  /* right-pointing triangle */
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.grid-editor[open] > summary::before { transform: rotate(90deg); }
+
+.grid-editor-body {
+  padding: 0 14px 14px;
+}
+
+.grid-editor-hint {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.grid-editor-body textarea {
+  width: 100%;
+  min-height: 180px;
+  background: #0a0a14;
+  color: var(--text);
+  border: 1px solid #2a2a4a;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  resize: vertical;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.grid-editor-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.grid-editor-actions button {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.grid-editor-status {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.grid-editor-status.ok    { color: #2ecc71; }
+.grid-editor-status.error { color: #e74c3c; }

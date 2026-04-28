@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Turret Battle</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1 id="pageTitle">Turret Battle</h1>
+
+  <canvas id="stage"></canvas>
+
+  <div class="controls">
+    <div class="control-group">
+      <span class="control-label">Map</span>
+      <select id="scenarioSelect"></select>
+    </div>
+    <div class="control-group">
+      <span class="control-label red">Red</span>
+      <select id="redTurretSelect"></select>
+    </div>
+    <div class="control-group">
+      <span class="control-label blue">Blue</span>
+      <select id="blueTurretSelect"></select>
+    </div>
+    <button id="startBtn">Start Battle</button>
+    <button id="resetBtn" class="secondary">Reset</button>
+    <button class="speed active" data-speed="1">1x</button>
+    <button class="speed" data-speed="2">2x</button>
+    <button class="speed" data-speed="3">3x</button>
+    <button id="muteBtn" class="secondary">&#128266; Sound</button>
+    <button id="recordBtn" class="secondary">&#9210; Record</button>
+  </div>
+
+  <div class="status" id="status">Loading...</div>
+
+  <details class="grid-editor" id="gridEditor">
+    <summary>Grid Editor (live edit current map)</summary>
+    <div class="grid-editor-body">
+      <div class="grid-editor-hint">
+        Edit the ASCII grid below. <code>.</code> empty,
+        <code>#</code>/<code>1-9</code> neutral wall/HP-barrier,
+        <code>R</code>/<code>B</code> red/blue walls,
+        <code>r</code>/<code>b</code> red/blue HP-barriers.
+        Spaces between cells are ignored.
+      </div>
+      <textarea id="gridText" spellcheck="false"></textarea>
+      <div class="grid-editor-actions">
+        <button id="gridApplyBtn">Apply</button>
+        <button id="gridRevertBtn" class="secondary">Revert</button>
+        <button id="gridCopyBtn"   class="secondary">Copy</button>
+        <span class="grid-editor-status" id="gridEditorStatus"></span>
+      </div>
+    </div>
+  </details>
+
+  <p class="hint">
+    Same-team balls pass through each other. Opposite-team balls collide and annihilate.
+    Destructible barriers show their HP as a number. Indestructible walls (darker, with
+    hatching) just bounce. Power-ups: <span style="color:#2ecc71">+Heal</span>,
+    <span style="color:#f1c40f">Rapid</span>, <span style="color:#e67e22">Multi</span>,
+    <span style="color:#9b59b6">Shield</span>.
+    Edit <code>js/config.js</code> for game mechanics,
+    <code>js/turret-types.js</code> to add turret classes,
+    <code>js/scenarios.js</code> for new maps.
+  </p>
+
+  <!-- Load order matters: later scripts depend on earlier ones -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/turret-types.js"></script>
+  <script src="js/scenarios.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/rendering.js"></script>
+  <script src="js/weapons.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

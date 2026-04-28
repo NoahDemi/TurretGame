@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/main.js)",
+      "Bash(node --check sound.js)",
+      "Bash(node --check main.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/rendering.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/game.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/turret-types.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/sound.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/scenarios.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/weapons.js)"
+    ]
+  }
+}
