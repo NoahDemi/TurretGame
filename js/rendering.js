@@ -1340,7 +1340,7 @@ function drawFx() {
       ctx.globalAlpha = 1 - p;
       ctx.fillStyle = f.color;
       ctx.beginPath();
-      ctx.arc(f.x, f.y, 10 * (1 - p * 0.6), 0, Math.PI * 2);
+      ctx.arc(f.x, f.y, Math.max(0, 10 * (1 - p * 0.6)), 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
     } else if (f.type === 'explosion' || f.type === 'bigexplosion') {
@@ -1400,7 +1400,7 @@ function drawFx() {
       ctx.globalAlpha = Math.max(0, 1 - p * 4);
       ctx.fillStyle   = '#ffffff';
       ctx.beginPath();
-      ctx.arc(f.x, f.y, 32 * (1 - p), 0, Math.PI * 2);
+      ctx.arc(f.x, f.y, Math.max(0, 32 * (1 - p)), 0, Math.PI * 2);
       ctx.fill();
       // Flying debris sparks
       ctx.globalAlpha = Math.max(0, 1 - p * 1.4);

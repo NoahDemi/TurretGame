@@ -264,9 +264,10 @@ function createBall(turret, angle) {
     body.forwardVx         = Math.cos(angle) * type.ballSpeed;
     body.forwardVy         = Math.sin(angle) * type.ballSpeed;
     body.orbitPhase0       = 0;  // set to 0 or π by fire()
-    body.orbitFrame        = 0;  // exact frame counter — no drift
+    body.orbitFrame        = 0;
     body.orbitSpawnX       = x;
     body.orbitSpawnY       = y;
+    body.orbitBounced      = false;
   }
 
   Body.setVelocity(body, {
@@ -489,6 +490,7 @@ function damageBarrier(barrier, ball) {
   }
 
   ball.bounces = (ball.bounces || 0) + 1;
+  if (ball.kind === 'orbit') ball.orbitBounced = true;
   const cap = (ball.maxBounces != null) ? ball.maxBounces : CONFIG.defaultBallMaxBounces;
 
   if (ball.bounces >= cap) {
@@ -519,8 +521,8 @@ function removeBarrier(barrier) {
 function bounceBall(ball) {
   if (!ball || ball.dead) return;
 
-  // Cluster balls explode after their max bounces
   ball.bounces = (ball.bounces || 0) + 1;
+  if (ball.kind === 'orbit') ball.orbitBounced = true;
   const cap = (ball.maxBounces != null) ? ball.maxBounces : CONFIG.defaultBallMaxBounces;
   if (cap === Infinity) return;
   if (ball.bounces >= cap) {
@@ -656,31 +658,28 @@ function step(dt) {
     if (b.kind === 'missile') {
       steerMissile(b);
     } else if (b.kind === 'orbit') {
-      // Analytically compute position from a frame counter so the circle
-      // is geometrically perfect with no drift.
-      // Center travels forward; each orb is laterally offset by R·cos(θ)
-      // where θ = phase0 + frame*ω.  The two orbs (phase 0 and π) are always
-      // on exactly opposite sides of the centre line.
+      // If a wall/barrier bounce happened last frame, Matter.js has already
+      // reflected the velocity — adopt it as the new forward direction so the
+      // orbit circles around the bounced heading instead of the original one.
+      if (b.orbitBounced) {
+        const v = b.velocity;
+        b.forwardVx    = v.x;
+        b.forwardVy    = v.y;
+        b.orbitBounced = false;
+      }
+
       b.orbitFrame = (b.orbitFrame || 0) + 1;
       const R   = b.orbitRadius || 30;
       const ω   = b.orbitAngularSpeed || 0.12;
       const θ   = (b.orbitPhase0 || 0) + b.orbitFrame * ω;
       const fvx = b.forwardVx || 0;
       const fvy = b.forwardVy || 0;
-
-      // Centre position
-      const cx = (b.orbitSpawnX || 0) + fvx * b.orbitFrame;
-      const cy = (b.orbitSpawnY || 0) + fvy * b.orbitFrame;
-
-      // Perpendicular unit vector (left-hand normal of forward direction)
-      const spd  = Math.sqrt(fvx * fvx + fvy * fvy) || 1;
-      const px   = -fvy / spd;
-      const py   =  fvx / spd;
-
-      const cosθ = Math.cos(θ);
+      const spd = Math.sqrt(fvx * fvx + fvy * fvy) || 1;
+      const px  = -fvy / spd;
+      const py  =  fvx / spd;
       const sinθ = Math.sin(θ);
-      Body.setPosition(b, { x: cx + px * R * cosθ, y: cy + py * R * cosθ });
-      // Velocity = derivative of position (for collision detection)
+
+      // Velocity only — no setPosition so Matter.js collision detection works
       Body.setVelocity(b, {
         x: fvx - px * R * ω * sinθ,
         y: fvy - py * R * ω * sinθ,
@@ -842,6 +841,6 @@ function loop(t) {
   if (running) {
     for (let i = 0; i < speedMul; i++) step(dt);
   }
-  draw();
+  try { draw(); } catch (e) { console.error('draw() error:', e); }
   rafId = requestAnimationFrame(loop);
 }

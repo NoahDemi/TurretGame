@@ -227,14 +227,6 @@ function fireLaser(turret, angle) {
     hijackedAt:  null,
   });
 
-  // Apply turret hits immediately — don't wait for the slow beam reveal.
-  // The beam is computed from the turret's current position; if we wait for
-  // the reveal frontier to reach the hit dist (1-2 s), the turret has moved
-  // far enough that the beam visually misses even though damage should land.
-  const L = lasers[lasers.length - 1];
-  for (const hit of hits) {
-    if (hit.kind === 'turret') applyLaserHit(L, hit);
-  }
 
   const muzzleColor = (turret.type.colors && turret.type.colors.primary)
                        ? turret.type.colors.primary
@@ -591,12 +583,41 @@ function steerMissile(ball) {
   }
   if (!target) return;
 
+  const px = ball.position.x;
+  const py = ball.position.y;
+
+  // Attraction: unit vector toward target
+  const tdx = target.x - px;
+  const tdy = target.y - py;
+  const tlen = Math.sqrt(tdx * tdx + tdy * tdy) || 1;
+  let forceX = tdx / tlen;
+  let forceY = tdy / tlen;
+
+  // Repulsion: steer away from barriers that are close ahead.
+  // Weight falls off quadratically so it's strong up close and fades
+  // at the detection radius — in crowded maps it may still hit, but
+  // it won't fly directly into an obvious obstacle.
+  const AVOID_R   = 90;   // px from barrier edge
+  const REPULSION = 2.2;
+  for (const b of barriers) {
+    // Only avoid solid barriers — skip sensors (slime puddles, banana peels)
+    // so their forces don't overwhelm homing in packed arenas.
+    if (b.dead || b.isSlimePuddle || b.isBananaPeel) continue;
+    const dx = px - b.position.x;
+    const dy = py - b.position.y;
+    const centerDist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const edgeDist   = Math.max(1, centerDist - 22);
+    if (edgeDist > AVOID_R) continue;
+    const w = Math.pow(1 - edgeDist / AVOID_R, 2);
+    forceX += (dx / centerDist) * w * REPULSION;
+    forceY += (dy / centerDist) * w * REPULSION;
+  }
+
+  const desiredAngle = Math.atan2(forceY, forceX);
+
   const v = ball.velocity;
   const speed = Math.sqrt(v.x * v.x + v.y * v.y) || 1;
-  const desiredAngle = Math.atan2(target.y - ball.position.y,
-                                  target.x - ball.position.x);
   const currentAngle = Math.atan2(v.y, v.x);
-  // Shortest-path angle delta in [-PI, PI]
   let delta = desiredAngle - currentAngle;
   while (delta >  Math.PI) delta -= 2 * Math.PI;
   while (delta < -Math.PI) delta += 2 * Math.PI;
@@ -607,15 +628,7 @@ function steerMissile(ball) {
     x: Math.cos(newAngle) * speed,
     y: Math.sin(newAngle) * speed,
   });
-  // Track facing for rendering
   ball.facing = newAngle;
-
-  // Lifetime check
-  if (timeSec - ball.born > (ball.lifetime || 12)) {
-    ball.dead = true;
-    fx.push({ type: 'explosion', x: ball.position.x, y: ball.position.y,
-              born: now(), life: 360 });
-  }
 }
 
 

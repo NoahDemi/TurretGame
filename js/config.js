@@ -96,7 +96,7 @@ const CONFIG = {
   // The laser is a single beam that grows from the turret over time so
   // you can SEE it sweep wall-to-wall. Damage is applied as the beam
   // reaches each surface and each target is hit at most ONCE per shot.
-  laserBeamSpeed:      2200,  // px/sec — how fast the beam reveals
+  laserBeamSpeed:      4500,  // px/sec — fast enough that turrets don't drift far before beam arrives
   laserCollisionWidth: 4,     // px around laser line that damages balls
   laserMaxLength:      4000,  // safety cap on total beam length (px)
   laserBulletDamage:   1,     // damage per frame the beam deals to bullets

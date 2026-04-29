@@ -9,7 +9,8 @@
       "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/turret-types.js)",
       "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/sound.js)",
       "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/scenarios.js)",
-      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/weapons.js)"
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/weapons.js)",
+      "Bash(node --check /Users/noahdemi/Documents/TurretGame/js/config.js)"
     ]
   }
 }

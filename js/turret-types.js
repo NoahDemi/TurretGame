@@ -245,7 +245,7 @@ const TURRET_TYPES = {
     fireCooldown:    1650,
     fireCooldownVar: 250,
     ballSpeed:       3.2,          // very slow
-    ballDamage:      28,           // big damage if it actually lands
+    ballDamage:      20,           // big damage if it actually lands
     ballRadius:      13,           // big glob
     ballMaxBounces:  1,            // explodes after first wall bounce too
     bulletPower:     4,            // hard to shoot down with normal bullets
@@ -269,12 +269,12 @@ const TURRET_TYPES = {
     weaponType: 'orbit',
     design:    'orbit',
     colors: { primary: '#9b59b6', secondary: '#e67e22' },
-    hp:              55,
+    hp:              65,
     moveSpeed:       1.2,
     fireCooldown:    1100,
     fireCooldownVar: 150,
     ballSpeed:        9.0,
-    ballDamage:       14,
+    ballDamage:       8,
     ballRadius:        9,
     ballMaxBounces:    3,
     bulletPower:       2,
@@ -320,12 +320,12 @@ const TURRET_TYPES = {
     weaponType: 'brainrot',
     design:    'brainrot',
     colors: { primary: '#ff006e', secondary: '#ffbe0b' },
-    hp:              50,
+    hp:              67,
     moveSpeed:       1.7,
     fireCooldown:    560,
     fireCooldownVar: 160,
-    ballSpeed:       8.0,
-    ballDamage:       7,
+    ballSpeed:       5.0,
+    ballDamage:       6,
     ballRadius:      13,
     ballMaxBounces:   6,
     bulletPower:      1,
@@ -347,7 +347,7 @@ const TURRET_TYPES = {
     moveSpeed:       2.0,
     fireCooldown:    480,
     fireCooldownVar:  60,
-    ballSpeed:        6.5,
+    ballSpeed:        4.5,
     ballDamage:        6,
     ballRadius:        7,
     ballMaxBounces:    3,
